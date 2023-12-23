@@ -23,9 +23,15 @@ With all that done, we can start by creating it.
 
 In this step we gonna start installing the necessary packages to make our Entity Framework Code First available.
 
-Right click on your project level, then select `Manage nuget Packages`, in the screen opened, go to the `Browse` tab and search for `EntityFrameork`.
-Once the package is located, select it, then on the right side a button for installing will be available.
-Click on it and wait for the installation to be completed.
+Right click on your project level, then select `Manage nuget Packages`, for this project we gonna need to install the following packages:
+- EntityFrameworkCore
+- EntityFrameworkCore.Relational
+- EntityFrameworkCore.SqlServer
+
+In the next step we will be creating a new project for classes, and in this new project we gonna need to install the following packages:
+- EntityFrameworkCore
+- EntityFrameworkCore.SqlServer
+- EntityFrameworkCore.Tools
 
 ## Adding Classes/Tables
 
@@ -56,3 +62,50 @@ public ToDoListsContext(DbContextOptions<ToDoListsContext> options) : base(optio
 
 We need to declare our previous created class (ToDoList) as a property in the following way:
 `public DbSet<ToDoList> ToDoLists { get; set; }`
+
+## Setting the connectionString
+
+Now we need to set the connection string to our SQL DB, since we will be using local, we need to go to appsettings.json
+lets create a section like below:
+```
+"ConnectionStrings": {
+  "ToDoListDB": "Server=(LocalDb)\\MSSQLLocalDB;Database=ToDoLists;Trusted_Connection=True;"
+},
+```
+
+This will reference our code to the DB it will create.
+
+## Updating Startup.cs
+
+In our Startup.cs file, we need to update it to use that connection string, to do this we will change the method `ConfigureServices` to look like below:
+```
+public void ConfigureServices(IServiceCollection services)
+{
+    services.AddControllers();
+    services.AddDbContext<ToDoListsContext>(option => option.UseSqlServer(Configuration.GetConnectionString("ToDoListDB")));
+}
+```
+
+This means it will add the db context using our DbContext class and our connection string.
+
+## Adding migration
+
+Now, we need to add a migration(this will convert our classes into SQL scripts that will create/update our tables).
+To do this, open Package Manager Console, you can do this through `View` -> `Other windows` -> `Package Manager Console`
+In here, we need to set Default Project to our Data project, also we need to right click in our main project and set it as Startup Project
+
+As next step we need to type in: `Add-Migration "Initial_Migration"`
+This command will generate our first migration
+
+## Creating our DB
+
+And here having a migration we can finally run in the Package Manager Console the following command:
+`Update-Database`
+This command will take care of comparing our local DB with our migrations and update it to the latest.
+
+Now we should be able to go to our SSMS and see our DB and tables in there as follow:
+
+![image](https://github.com/gaschneider/useful-stuff/assets/16023844/4ee16cae-76b5-40c7-964f-dc08a7f8791a)
+
+
+For the full code check my other repo [ToDo-List](https://github.com/gaschneider/ToDo-List)
