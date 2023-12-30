@@ -8,4 +8,4 @@
 
 [CSS Box Shadow Generator](https://www.cssmatic.com/box-shadow) - similar to the grid one, but for box shadow effects
 
-[Clip Path](https://bennettfeely.com/clippy/) - simple way to create shapes using css clip-path property
+[CSS Clip Path](https://bennettfeely.com/clippy/) - simple way to create shapes using css clip-path property
