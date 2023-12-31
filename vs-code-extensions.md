@@ -17,3 +17,8 @@
 - Path Intellisense
 - Prettier - Code formatter
 - vscode-icons
+- Console Ninja
+- Random Everything
+- Snippet Creator 
+- Image Preview
+- Toggle Quotes
